@@ -28,6 +28,7 @@
 </template>
 
 <script lang="ts">
+import Vue from 'vue'
 import draggable from 'vuedraggable'
 import AppLauncher from '~/components/app-launcher.vue'
 import WindowComponent from '~/components/window-component.vue'
@@ -40,7 +41,7 @@ type App = {
   command: string
 }
 
-export default {
+export default Vue.extend({
   name: 'LauncherGrid',
   components: {
     draggable,
@@ -93,5 +94,5 @@ export default {
       this.runningApps.push(app)
     },
   },
-}
+})
 </script>
