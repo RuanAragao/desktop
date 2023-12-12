@@ -12,15 +12,15 @@ export default {
     return {
       command: '',
       output: '',
-    };
+    }
   },
   methods: {
     executeCommand() {
       // Execute the command and update the output
       // You can replace this with your own logic
-      this.output += `$ ${this.command}\n`;
-      this.command = '';
+      this.output += `$ ${this.command}\n`
+      this.command = ''
     },
   },
-};
+}
 </script>
