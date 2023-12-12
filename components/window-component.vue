@@ -11,7 +11,11 @@
       <div class="title text-gray-800">{{ title }}</div>
       <div class="controls flex space-x-2">
         <button class="minimize w-4 h-4 bg-gray-400 rounded-full"></button>
-        <button class="maximize w-4 h-4 bg-gray-400 rounded-full"></button>
+        <button
+          class="maximize w-4 h-4 bg-gray-400 rounded-full"
+          @click.prevent="maximizeWindow"
+          @touchend.prevent="maximizeWindow"
+        ></button>
         <button
           class="close w-4 h-4 bg-gray-400 rounded-full"
           @click.prevent="onClose"
@@ -147,12 +151,24 @@ export default {
     // Window controls
     minimizeWindow() {
       // Minimize the window
+      // if (this.$refs.windowRef.style.display === 'none') {
+      //   this.$refs.windowRef.style.display = 'block'
+      //   return
+      // }
+      // this.$refs.windowRef.style.display = 'none'
     },
     maximizeWindow() {
-      // Maximize the window
+      if (this.$refs.windowRef.style.width === '100%') {
+        this.$refs.windowRef.style.width = '340px'
+        this.$refs.windowRef.style.height = '230px'
+        return
+      }
+      this.$refs.windowRef.style.left = '50%'
+      this.$refs.windowRef.style.top = '50%'
+      this.$refs.windowRef.style.width = '100%'
+      this.$refs.windowRef.style.height = '100%'
     },
     closeWindow() {
-      // Close the window
       onClose()
     },
   },
