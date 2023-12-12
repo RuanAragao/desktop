@@ -14,6 +14,9 @@ export default Vue.extend({
 
 <style>
 html {
+  position: fixed;
+  height: 100%;
+  width: 100%;
   overflow: hidden;
 }
 

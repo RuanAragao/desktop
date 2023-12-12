@@ -11,8 +11,8 @@
         v-for="(app, index) in loadedApps"
         :key="index"
         v-bind="app"
-        @click.native="() => openApp(app)"
-        @touchstart.native="() => openApp(app)"
+        @click.native.prevent="() => openApp(app)"
+        @touchend.native.prevent="() => openApp(app)"
       />
     </draggable>
     <WindowComponent

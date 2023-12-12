@@ -5,7 +5,8 @@
   >
     <div
       class="title-bar bg-gray-200 px-4 py-2 flex items-center justify-between rounded-t-lg"
-      @mousedown="mousedownTitleBar"
+      @mousedown.prevent="mousedownTitleBar"
+      @touchstart.prevent="touchstartTitleBar"
     >
       <div class="title text-gray-800">{{ title }}</div>
       <div class="controls flex space-x-2">
@@ -13,14 +14,18 @@
         <button class="maximize w-4 h-4 bg-gray-400 rounded-full"></button>
         <button
           class="close w-4 h-4 bg-gray-400 rounded-full"
-          @click="onClose"
+          @click.prevent="onClose"
+          @touchend.prevent="onClose"
         ></button>
       </div>
     </div>
     <div class="content p-4">
       <slot></slot>
     </div>
-    <div class="resize-handle bottom-right" @mousedown="startResize"></div>
+    <div
+      class="resize-handle bottom-right"
+      @mousedown.prevent="startResize"
+    ></div>
   </div>
 </template>
 
@@ -66,6 +71,22 @@ export default {
       document.addEventListener('mousemove', this.dragWindow)
       document.addEventListener('mouseup', this.stopDrag)
     },
+    touchstartTitleBar(event) {
+      this.dragging = true
+
+      // Store initial mouse position
+      this.initialMouseX = event.touches[0].clientX
+      this.initialMouseY = event.touches[0].clientY
+      console.log(this.initialMouseX, this.initialMouseY)
+
+      // Store initial window position
+      this.initialWindowX = this.$refs.windowRef.offsetLeft
+      this.initialWindowY = this.$refs.windowRef.offsetTop
+
+      // Register mousemove and mouseup event listeners
+      document.addEventListener('touchmove', this.touchDragWindow)
+      document.addEventListener('touchend', this.touchStopDrag)
+    },
     dragWindow(event) {
       // Calculate new window position based on mouse movement
       const newWindowX =
@@ -77,11 +98,28 @@ export default {
       this.$refs.windowRef.style.left = `${newWindowX}px`
       this.$refs.windowRef.style.top = `${newWindowY}px`
     },
+    touchDragWindow(event) {
+      // Calculate new window position based on mouse movement
+      const newWindowX =
+        this.initialWindowX + (event.touches[0].clientX - this.initialMouseX)
+      const newWindowY =
+        this.initialWindowY + (event.touches[0].clientY - this.initialMouseY)
+
+      // Update window position
+      this.$refs.windowRef.style.left = `${newWindowX}px`
+      this.$refs.windowRef.style.top = `${newWindowY}px`
+    },
     stopDrag() {
       // Remove mousemove and mouseup event listeners
       this.dragging = false
       document.removeEventListener('mousemove', this.dragWindow)
       document.removeEventListener('mouseup', this.stopDrag)
+    },
+    touchStopDrag() {
+      // Remove mousemove and mouseup event listeners
+      this.dragging = false
+      document.removeEventListener('touchmove', this.touchDragWindow)
+      document.removeEventListener('touchend', this.stopDrag)
     },
     startResize(event) {
       this.resizing = true
@@ -128,8 +166,8 @@ export default {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 640px;
-  height: 480px;
+  width: 340px;
+  height: 230px;
   overflow: hidden;
 }
 
