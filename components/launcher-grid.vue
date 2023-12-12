@@ -12,6 +12,7 @@
         :key="index"
         v-bind="app"
         @click.native="() => openApp(app)"
+        @touchstart.native="() => openApp(app)"
       />
     </draggable>
     <WindowComponent
